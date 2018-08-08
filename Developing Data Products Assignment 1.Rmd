@@ -1,0 +1,59 @@
+---
+title: "My Leaflet Map"
+author: "Scott Fan"
+date: "08/08/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+library(dplyr)
+library(leaflet)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Leaflet Map of Singapore for Tourist
+
+This leaflet map was created on the 8th of August, 2018. 
+
+### 20 Must Visit Attractions in Singapore 
+
+These are the points of interest around Singapore (My Hometown) that are of interest to tourist.
+
+```{r poi, echo = FALSE}
+poi_labels <- c("ArtScience Museum","National Gallery Singapore","National Museum of Singapore","Haw Par Villa","Singapore Botanical Gardens","Chinese and Japanese Gardens","Fort Canning","Gardens by the Bay","Singapore Zoo","River Safari", "Pulau Ubin", "St John’s Island", "Little India","Chinatown","Kampong Glam", "Universal Studios Singapore", "Siloso Beach", "Adventure Cove Waterpark","Marina Bay Sands Rooftop","1-Altitude")
+
+poi_lat <- c(1.286311,1.2897,1.2966,1.2843,1.3138,1.339,1.2945,1.2816,1.4043,1.4029,1.4126,1.2167,1.3063,1.2848,1.3016,1.254,1.2553,1.2591,1.2834,1.2849
+)
+
+poi_long <- c(103.859252,103.8513,103.8485,103.7825,103.8159,103.7298,103.8458,103.8636,103.793,103.7917,103.9577,103.85,103.8494,103.8439,103.8623,103.8238,103.8126,103.819,103.8607,103.8511
+)
+
+poi_add <- c("6 Bayfront Ave","1 Saint Andrew’s Road, #01–01","93 Stamford Road","262 Pasir Panjang Road","1 Cluny Rd","1 Chinese Garden Rd","River Valley Rd","18 Marina Gardens Dr","80 Mandai Lake Rd","80 Mandai Lake Road","-","-","-","-","-","8 Sentosa Gateway","-","8 Sentosa Gateway, Resorts World Sentosa","10 Bayfront Avenue","1 Raffles Place, One Raffles Place Shopping Mall"
+)
+
+
+POI <- data.frame("Points-of-Interest"= poi_labels,"Latitude"=poi_lat,"Longitude"=poi_long,"Address"=poi_add)
+
+kable(POI, caption ="20 Must-Visit Attractions in Singapore")
+```
+
+They are based off the recommendation of Prianka Ghosh's article on 20 Must-Visit Attractions in Singapore, published on [The Culture Trip](https://theculturetrip.com/asia/singapore/articles/20-must-visit-attractions-in-singapore/)
+
+
+### Location of Attractions
+
+Feel free to zoom in and out to look at these locations!
+
+```{r map, echo=FALSE, message=FALSE, results="asis"}
+
+POI2 <- POI[,2:4]
+names(POI2) <- c("lat", "long", "popup")
+myMap <- POI2 %>%
+  leaflet() %>% 
+  addTiles() %>%
+  addMarkers(clusterOptions =markerClusterOptions(),label = as.character(poi_labels))
+
+myMap
+```
+
